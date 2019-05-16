@@ -1,6 +1,7 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #define WIN32_LEAN_AND_MEAN
 #include "../SatisfactorySdk/SDK.hpp"
+#include "CustomHookLoader.h"
 #include <stdafx.h>
 #include <SatisfactoryModLoader.h>
 #include <string>
@@ -46,6 +47,9 @@ namespace SML {
 			ShowWindow(GetConsoleWindow(), SW_SHOW);
 		}
 
+		// test hook
+		HookLoader::hookAll();
+
 		// load sdk
 		SDK::InitSDK();
 		Utility::info("Initialized SDK");
@@ -60,6 +64,8 @@ namespace SML {
 		modHandler.check_dependencies();
 		modHandler.post_setup_mods();
 		Mod::Hooks::hookFunctions();
+
+		Utility::info(SML::modFunctions[Event::AFGCharacterPlayerBeginPlay].size());
 
 		// log mod size
 		size_t listSize = modHandler.mods.size();

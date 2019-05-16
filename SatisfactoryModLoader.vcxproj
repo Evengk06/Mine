@@ -152,14 +152,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SatisfactoryModLoader\CustomHookLoader.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Etc.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Global.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Input.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Player.h" />
     <ClInclude Include="SatisfactoryModLoader\game\UI.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Utility.h" />
-    <ClInclude Include="SatisfactoryModLoader\HookLoader.h" />
-    <ClInclude Include="SatisfactoryModLoader\HookLoaderInternal.h" />
     <ClInclude Include="SatisfactoryModLoader\Lib.h" />
     <ClInclude Include="SatisfactoryModLoader\mod\Hooks.h" />
     <ClInclude Include="SatisfactoryModLoader\mod\Mod.h" />

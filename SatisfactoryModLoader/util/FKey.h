@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <util/FString.h>
-#include <HookLoader.h>
 
 namespace SML {
 	namespace Objects {
@@ -73,8 +72,6 @@ namespace SML {
 
 			const FString* ToString();
 		};
-
-		DEFINE_METHOD(FText::ToString);
 
 		struct TAttribute {
 			FText Value;

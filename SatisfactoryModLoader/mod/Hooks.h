@@ -2,8 +2,6 @@
 #include <Windows.h>
 #include <Lib.h>
 #include <util/FString.h>
-#include <HookLoader.h>
-#include <HookLoaderInternal.h>
 
 namespace SML {
 	namespace Mod {

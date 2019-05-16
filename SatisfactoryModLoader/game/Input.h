@@ -1,6 +1,5 @@
 #pragma once
 
-#include <HookLoader.h>
 #include <util/FString.h>
 #include <util/FKey.h>
 
@@ -22,8 +21,6 @@ namespace SML {
 		public:
 			bool InputKey(SML::Objects::FKey Key, InputEvent Event, float AmountDepressed, bool bGamepad);
 		};
-
-		DEFINE_METHOD_PRE("U", PlayerInput::InputKey);
 	}
 }
 

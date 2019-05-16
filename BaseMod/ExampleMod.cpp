@@ -3,9 +3,9 @@
 #include <game/Global.h>
 #include <game/Input.h>
 #include <mod/Mod.h>
-#include <HookLoaderInternal.h>
 #include <mod/ModFunctions.h>
 #include <util/JsonConfig.h>
+#include "./CustomHookLoader.h"
 
 using namespace SML::Mod;
 using namespace SML::Objects;
@@ -25,7 +25,7 @@ json config = SML::Utility::JsonConfig::load(MOD_NAME, {
 });
 
 // Global variables required by the mod
-AFGPlayerController* player;
+void* player;
 
 // Function to be called as a command (called when /kill is called)
 // All command functions need to have the same parameters, which is SML::CommandData
@@ -36,7 +36,7 @@ void killPlayer(Functions::CommandData data) {
 		LOG(s);
 	}
 	LOG("Killed Player");
-	::call<&AFGPlayerController::Suicide>(player);
+	//::call<&AFGPlayerController::Suicide>(player);
 }
 
 // information about the mod
@@ -61,18 +61,17 @@ Mod::Info modInfo {
 	{}
 };
 
+// Function to be hooked
+// Every hook has two parameters at the start, even when the target function does not have any parameters.
+// The first is a pointer to ModReturns, which allows you to disable SML calling the function after your hook.
+// The second is a pointer to an object of the base class of the function, which in this case is AFGPlayerController.
+void beginPlay(void* playerIn) {
+	LOG("Got Player");
+	player = playerIn;
+}
+
 // The mod's class, put all functions inside here
 class ExampleMod : public Mod {
-
-	// Function to be hooked
-	// Every hook has two parameters at the start, even when the target function does not have any parameters.
-	// The first is a pointer to ModReturns, which allows you to disable SML calling the function after your hook.
-	// The second is a pointer to an object of the base class of the function, which in this case is AFGPlayerController.
-	void beginPlay(Functions::ModReturns* modReturns, AFGPlayerController* playerIn) {
-		LOG("Got Player");
-		player = playerIn;
-	}
-
 public:
 	// Constructor for SML usage, do not rename!
 	ExampleMod() : Mod(modInfo) {
@@ -83,26 +82,25 @@ public:
 		// Use the placeholders namespace
 		using namespace std::placeholders;
 
-		// More on namespaces:
-		// * The functions that will be of use to you are in the SML::Mods::Functions namespace. A tip is to type Functions:: and see what functions are available for you to use. 
+		SML::HookLoader::subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(beginPlay);
 
 		// Use a member function as handler
-		::subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, this, _1, _2)); //bind the beginPlay function, with placeholder variables
+		//::subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, this, _1, _2)); //bind the beginPlay function, with placeholder variables
 		// Because there are two inputs to the function, we use _1 and _2. If there were 3 inputs, we would use _1, _2, and _3, and so forth.
 
 		// Use a lambda with captured this-ptr as handler
-		::subscribe<&PlayerInput::InputKey>([this](Functions::ModReturns* modReturns, PlayerInput* playerInput, FKey key, InputEvent event, float amount, bool gamePad) {
+		/*::subscribe<&PlayerInput::InputKey>([this](Functions::ModReturns* modReturns, PlayerInput* playerInput, FKey key, InputEvent event, float amount, bool gamePad) {
 			if(GetAsyncKeyState('G')) {
 				LOG("G key pressed");
 				::call<&AFGPlayerController::Suicide>(player);
 			}
 			return false;
-		});
+		});*/
 
 		// Tick functions are called every frame of the game. BE VERY CAREFUL WHEN USING THIS FUNCTION!!! Putting a lot of code in here will slow the game down to a crawl!
-		::subscribe<&UWorld::Tick>([this](Functions::ModReturns*, UWorld* world, ELevelTick tick, float delta) {
-			//LOG("test");
-		});
+		//::subscribe<&UWorld::Tick>([this](Functions::ModReturns*, UWorld* world, ELevelTick tick, float delta) {
+		//	//LOG("test");
+		//});
 
 		// Register /kill to call the killPlayer function
 		Functions::registerCommand("kill", killPlayer); //functions registered like this must exist outside of the class
