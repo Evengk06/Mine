@@ -3,8 +3,11 @@
 #include <iostream>
 #include <fstream>
 #include <utility>
+#include <map>
+#include <vector>
 
 #include "../Lib.h"
+#include "HookLoader.h"
 
 namespace SML {
 	namespace Utility {

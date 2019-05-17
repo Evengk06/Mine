@@ -152,7 +152,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="SatisfactoryModLoader\CustomHookLoader.h" />
+    <ClInclude Include="SatisfactoryModLoader\HookLoader.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Etc.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Global.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Input.h" />
@@ -178,7 +178,7 @@
     <ClInclude Include="SatisfactorySDK\SDK.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SatisfactoryModLoader\CustomHookLoader.cpp" />
+    <ClCompile Include="SatisfactoryModLoader\HookLoader.cpp" />
     <ClCompile Include="SatisfactoryModLoader\game\API.cpp" />
     <ClCompile Include="SatisfactoryModLoader\Lib.cpp" />
     <ClCompile Include="SatisfactoryModLoader\mod\Hooks.cpp" />

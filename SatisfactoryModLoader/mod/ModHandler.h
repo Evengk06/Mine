@@ -16,7 +16,7 @@ namespace SML {
 			std::vector<Registry> APIRegistry;
 
 			void load_mods(const char* startingPath);
-			void setup_mods();
+			void setup_mods(HookArray array);
 			void check_dependencies();
 			void post_setup_mods();
 		private:

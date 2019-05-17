@@ -23,7 +23,7 @@ json config = SML::Utility::JsonConfig::load(MOD_NAME, {
 	{"Float", 1.0}
 });
 
-// Global variables required by the mod
+/// Global variables required by the mod
 void* player;
 
 // Function to be called as a command (called when /kill is called)
@@ -77,11 +77,11 @@ public:
 	}
 
 	// The setup function is the heart of the mod, where you hook your functions and register your commands and API functions. Do not rename!
-	void setup() override {
+	void setup(HookArray array) override {
 		// Use the placeholders namespace
 		using namespace std::placeholders;
 
-		//this->loader->subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(beginPlay);
+		SML::HookLoader::subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(array, beginPlay);
 
 		// Use a member function as handler
 		//::subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, this, _1, _2)); //bind the beginPlay function, with placeholder variables

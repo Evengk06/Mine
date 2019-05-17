@@ -1,3 +1,5 @@
+#pragma once
+
 #include <util/DetoursFwd.h>
 #include <map>
 #include <vector>
@@ -13,23 +15,31 @@ namespace SML {
 	template <typename... Args>
 	using EventFunc = void(Args...);
 
+	typedef std::map<SML::Event, std::vector<void*>>& HArray;
+	static std::map<SML::Event, std::vector<void*>> modFunctions;
+
 	class HookLoader {
 	public:
-		static std::map<Event, std::vector<void*>> modFunctions;
+		static std::map<SML::Event, std::vector<void*>> cachedFunctions;
 
 		HookLoader() {}
 
 		template <Event E>
-		static void subscribe(void* function) {
-			modFunctions[E].push_back(function);
-			Utility::info("Subscribed function from mod. \nEvent:", E, "\nCapacity: ", modFunctions[E].size());
+		static void subscribe(HArray functions, void* function) {
+			functions[E].push_back(function);
+			Utility::info("Subscribed function from mod. \nEvent:", E, "\nCapacity: ", functions[E].size());
+			Utility::info("MODFUNCTIONS FROM MOD: ", &functions);
 		}
 
-		static void hookAll();
+		static void cache(std::map<SML::Event, std::vector<void*>> array);
+
+		static void hookAll(HArray array);
 	private:
 		template <Event E, typename... A>
 		static void _reroute(A... args) {
-			std::vector<void*> modEvents = modFunctions[E];
+			//auto obj = 0x7FFDCC840A08;
+			Utility::info("MODFUNCTIONS FROM ROUTER: ", &modFunctions);
+			std::vector<void*>& modEvents = cachedFunctions[E];
 			Utility::info("Capacity: ", modEvents.size());
 			for (size_t i = 0; i < modEvents.size(); i++) {
 				auto func = *(EventFunc<A...>*)modEvents[i];
@@ -38,7 +48,7 @@ namespace SML {
 		}
 
 		template <Event E>
-		static void _subscribe(const char* hook) {
+		static void _subscribe(HArray array, const char* hook) {
 			void* o = Detours::DetourFindFunction("FactoryGame-Win64-Shipping.exe", hook);
 			if (!o) {
 				Utility::error("Cannot find ", hook);

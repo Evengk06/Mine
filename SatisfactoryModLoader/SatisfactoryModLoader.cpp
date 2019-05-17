@@ -16,7 +16,7 @@
 #include <mod/Hooks.h>
 
 namespace SML {
-	static const char* logName = "SatisfactoryModLoader.log";
+	const char* logName = "SatisfactoryModLoader.log";
 	Mod::ModHandler modHandler;
 	HookLoader modLoader;
 
@@ -47,8 +47,11 @@ namespace SML {
 			ShowWindow(GetConsoleWindow(), SW_SHOW);
 		}
 
+		SML::Utility::info("FROM LOADER: ", hookLoader);
+		Utility::info("MODFUNCTIONS FROM LAUNCHER: ", &modFunctions);
+
 		// test hook
-		modLoader.hookAll();
+		hookLoader->hookAll(modFunctions);
 
 		// load sdk
 		SDK::InitSDK();
@@ -60,10 +63,14 @@ namespace SML {
 
 		// load mods
 		modHandler.load_mods(p);
-		modHandler.setup_mods();
+		modHandler.setup_mods(modFunctions);
 		modHandler.check_dependencies();
 		modHandler.post_setup_mods();
 		Mod::Hooks::hookFunctions();
+
+		Utility::info("IN LOADER: ", modFunctions[Event::AFGCharacterPlayerBeginPlay].size());
+
+		hookLoader->cache(modFunctions);
 
 		// log mod size
 		size_t listSize = modHandler.mods.size();
