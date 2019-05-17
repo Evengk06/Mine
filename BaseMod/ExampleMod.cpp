@@ -5,7 +5,6 @@
 #include <mod/Mod.h>
 #include <mod/ModFunctions.h>
 #include <util/JsonConfig.h>
-#include "./CustomHookLoader.h"
 
 using namespace SML::Mod;
 using namespace SML::Objects;
@@ -82,7 +81,7 @@ public:
 		// Use the placeholders namespace
 		using namespace std::placeholders;
 
-		SML::HookLoader::subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(beginPlay);
+		//this->loader->subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(beginPlay);
 
 		// Use a member function as handler
 		//::subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, this, _1, _2)); //bind the beginPlay function, with placeholder variables

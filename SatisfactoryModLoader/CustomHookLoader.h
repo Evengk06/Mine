@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <util/Utility.h>
+#include <Windows.h>
 
 namespace SML {
 	enum Event {
@@ -12,21 +13,19 @@ namespace SML {
 	template <typename... Args>
 	using EventFunc = void(Args...);
 
-	static std::map<Event, std::vector<void*>> modFunctions;
-
-	static class HookLoader {
+	class HookLoader {
 	public:
+		static std::map<Event, std::vector<void*>> modFunctions;
+
+		HookLoader() {}
+
 		template <Event E>
 		static void subscribe(void* function) {
 			modFunctions[E].push_back(function);
 			Utility::info("Subscribed function from mod. \nEvent:", E, "\nCapacity: ", modFunctions[E].size());
 		}
 
-		static void hookAll() {
-			modFunctions = std::map<Event, std::vector<void*>>();
-
-			_subscribe<Event::AFGCharacterPlayerBeginPlay>("AFGCharacterPlayer::BeginPlay");
-		}
+		static void hookAll();
 	private:
 		template <Event E, typename... A>
 		static void _reroute(A... args) {

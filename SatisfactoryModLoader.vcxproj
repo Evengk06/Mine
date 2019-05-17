@@ -178,6 +178,7 @@
     <ClInclude Include="SatisfactorySDK\SDK.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SatisfactoryModLoader\CustomHookLoader.cpp" />
     <ClCompile Include="SatisfactoryModLoader\game\API.cpp" />
     <ClCompile Include="SatisfactoryModLoader\Lib.cpp" />
     <ClCompile Include="SatisfactoryModLoader\mod\Hooks.cpp" />

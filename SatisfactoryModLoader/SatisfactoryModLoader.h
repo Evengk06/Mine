@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <Windows.h>
 #include <mod/ModHandler.h>
+#include "CustomHookLoader.h"
 
 namespace SML {
 	static const std::string modLoaderVersion = "1.0.0-pr4"; // SML's version
@@ -14,6 +15,7 @@ namespace SML {
 	static bool supressErrors = false;
 
 	extern Mod::ModHandler modHandler;
+	extern HookLoader modLoader;
 
 	void mod_loader_entry();
 	void read_config();
