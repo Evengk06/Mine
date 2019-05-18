@@ -64,9 +64,10 @@ Mod::Info modInfo {
 // Every hook has two parameters at the start, even when the target function does not have any parameters.
 // The first is a pointer to ModReturns, which allows you to disable SML calling the function after your hook.
 // The second is a pointer to an object of the base class of the function, which in this case is AFGPlayerController.
-void beginPlay(void* playerIn) {
+void beginPlay(SML::HookReturn<void>* returnObj, void* playerIn) {
 	LOG("Got Player");
 	player = playerIn;
+	SML::Utility::info_mod(MOD_NAME, "Player: ", player);
 }
 
 // The mod's class, put all functions inside here

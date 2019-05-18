@@ -11,6 +11,10 @@
 
 namespace SML {
 	namespace Utility {
+		enum NullType {
+			Null
+		};
+
 		static std::ofstream logFile; //
 
 		enum LogType {

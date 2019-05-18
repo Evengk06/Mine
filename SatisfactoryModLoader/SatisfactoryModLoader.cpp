@@ -47,11 +47,10 @@ namespace SML {
 			ShowWindow(GetConsoleWindow(), SW_SHOW);
 		}
 
-		SML::Utility::info("FROM LOADER: ", hookLoader);
-		Utility::info("MODFUNCTIONS FROM LAUNCHER: ", &modFunctions);
-
 		// test hook
 		hookLoader->hookAll(modFunctions);
+
+		Utility::info("FROM LOADER: ", modFunctions[Event::AFGCharacterPlayerBeginPlay].original);
 
 		// load sdk
 		SDK::InitSDK();
@@ -67,8 +66,6 @@ namespace SML {
 		modHandler.check_dependencies();
 		modHandler.post_setup_mods();
 		Mod::Hooks::hookFunctions();
-
-		Utility::info("IN LOADER: ", modFunctions[Event::AFGCharacterPlayerBeginPlay].size());
 
 		hookLoader->cache(modFunctions);
 

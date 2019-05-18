@@ -1,16 +1,21 @@
 #include "stdafx.h"
 #include "HookLoader.h"
+#include <functional>
 
 namespace SML {
-	std::map<SML::Event, std::vector<void*>> HookLoader::cachedFunctions;
+	std::map<SML::Event, HookedFunction> HookLoader::cachedFunctions;
 
-	void HookLoader::cache(std::map<SML::Event, std::vector<void*>> array) {
+	void HookLoader::cache(std::map<SML::Event, HookedFunction> array) {
 		cachedFunctions = array;
+		Utility::info("IN CACHE: ", cachedFunctions[Event::AFGCharacterPlayerBeginPlay].original);
 	}
 
 	void HookLoader::hookAll(HArray array) {
-		array = std::map<Event, std::vector<void*>>();
+		array = std::map<Event, HookedFunction>();
 
 		_subscribe<Event::AFGCharacterPlayerBeginPlay>(array, "AFGCharacterPlayer::BeginPlay");
+
+		Utility::info("IN HOOKALL: ", cachedFunctions[Event::AFGCharacterPlayerBeginPlay].original);
+		//_subscribe<Event::AFGPlayerControllerBeginPlay, void>(array, "AFGPlayerController::BeginPlay");
 	}
 }
