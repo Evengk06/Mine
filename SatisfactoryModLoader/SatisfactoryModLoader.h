@@ -9,7 +9,6 @@
 #include "HookLoader.h"
 
 namespace SML {
-	inline static HookLoader* hookLoader = new HookLoader();
 	inline static const std::string modLoaderVersion = "1.0.0-pr4";
 	inline static const std::string targetVersion[2] = { "99133", "98994" };
 	inline static bool loadConsole = true;

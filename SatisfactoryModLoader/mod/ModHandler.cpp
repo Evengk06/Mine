@@ -19,10 +19,10 @@ namespace SML {
 		}
 
 		//call the setup function of every loaded mod
-		void ModHandler::setup_mods(HookArray array) {
+		void ModHandler::setup_mods() {
 			for (auto&& mod : mods) {
 				Utility::info("Setting up ", mod->info.name);
-				mod->setup(array);
+				mod->setup();
 			}
 		}
 

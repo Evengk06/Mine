@@ -7,7 +7,7 @@ namespace SML {
 			: post_setup_called(false)
 			, info(std::move(info)) {}
 
-		void Mod::setup(HookArray array) {}
+		void Mod::setup() {}
 		void Mod::post_setup() {}
 		Mod::~Mod() {}
 	}

@@ -8,8 +8,6 @@
 
 #define MOD_API extern "C" __declspec(dllexport)
 
-typedef std::map<SML::Event, SML::HookedFunction>& HookArray;
-
 namespace SML {
 	namespace Mod {
 		class Mod {
@@ -28,7 +26,7 @@ namespace SML {
 
 			SML_API Mod(const Info& info);
 
-			virtual void SML_API setup(HookArray array);
+			virtual void SML_API setup();
 			virtual void SML_API post_setup();
 			virtual SML_API ~Mod();
 

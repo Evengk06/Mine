@@ -1,6 +1,7 @@
 #pragma once
 
 #include <util/FString.h>
+#include "HookLoader.h"
 
 #pragma warning (push)
 #pragma warning (disable: 4667)

@@ -3,19 +3,24 @@
 #include <functional>
 
 namespace SML {
-	std::map<SML::Event, HookedFunction> HookLoader::cachedFunctions;
+	/*template <auto O>
+	void subscribe(typename HookLoader<decltype(O), O>::Handler handler) {
+		HookLoader<decltype(O), O>::subscribe(handler);
+	}*/
 
-	void HookLoader::cache(std::map<SML::Event, HookedFunction> array) {
-		cachedFunctions = array;
-		Utility::info("IN CACHE: ", cachedFunctions[Event::AFGCharacterPlayerBeginPlay].original);
-	}
+	//std::map<SML::Event, HookedFunction> HookLoader::cachedFunctions;
 
-	void HookLoader::hookAll(HArray array) {
-		array = std::map<Event, HookedFunction>();
+	//void HookLoader::cache(std::map<SML::Event, HookedFunction> array) {
+	//	cachedFunctions = array;
+	//	Utility::info("IN CACHE: ", cachedFunctions[Event::AFGCharacterPlayerBeginPlay].original);
+	//}
 
-		_subscribe<Event::AFGCharacterPlayerBeginPlay>(array, "AFGCharacterPlayer::BeginPlay");
+	//void HookLoader::hookAll(HArray array) {
+	//	array = std::map<Event, HookedFunction>();
 
-		Utility::info("IN HOOKALL: ", cachedFunctions[Event::AFGCharacterPlayerBeginPlay].original);
-		//_subscribe<Event::AFGPlayerControllerBeginPlay, void>(array, "AFGPlayerController::BeginPlay");
-	}
+	//	_subscribe<Event::AFGCharacterPlayerBeginPlay>(array, "AFGCharacterPlayer::BeginPlay");
+
+	//	//Utility::info("IN HOOKALL: ", cachedFunctions[Event::AFGCharacterPlayerBeginPlay].original);
+	//	//_subscribe<Event::AFGPlayerControllerBeginPlay, void>(array, "AFGPlayerController::BeginPlay");
+	//}
 }

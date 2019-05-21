@@ -5,6 +5,8 @@
 #include <mod/Mod.h>
 #include <mod/ModFunctions.h>
 #include <util/JsonConfig.h>
+#include <iostream>
+#include <type_traits>
 
 using namespace SML::Mod;
 using namespace SML::Objects;
@@ -64,25 +66,70 @@ Mod::Info modInfo {
 // Every hook has two parameters at the start, even when the target function does not have any parameters.
 // The first is a pointer to ModReturns, which allows you to disable SML calling the function after your hook.
 // The second is a pointer to an object of the base class of the function, which in this case is AFGPlayerController.
-void beginPlay(SML::HookReturn<void>* returnObj, void* playerIn) {
-	LOG("Got Player");
-	player = playerIn;
-	SML::Utility::info_mod(MOD_NAME, "Player: ", player);
+//int fn(int) { return int(); }
+
+//template <typename F, typename R = std::result_of<F()>>
+//R call(F& f) {
+//	return f();
+//}
+//
+//template <class T>
+//auto test(T t) -> decltype(t) {
+//	return t;
+//}
+
+template <typename T>
+auto arg() -> decltype(std::declval<T>()) {
+	return std::declval<T>();
+}
+
+template <typename... T>
+void test() {
+	
 }
 
 // The mod's class, put all functions inside here
 class ExampleMod : public Mod {
+	void beginPlay(ModReturns* returns, void* player) {
+		LOG("Got Player");
+		//player = playerIn;
+		//SML::Utility::info_mod(MOD_NAME, "Player: ", player);
+	}
+
 public:
 	// Constructor for SML usage, do not rename!
 	ExampleMod() : Mod(modInfo) {
 	}
 
 	// The setup function is the heart of the mod, where you hook your functions and register your commands and API functions. Do not rename!
-	void setup(HookArray array) override {
+	void setup() override {
 		// Use the placeholders namespace
 		using namespace std::placeholders;
 
-		SML::HookLoader::subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(array, beginPlay);
+		// std::bind(&ExampleMod::beginPlay, _1)
+		//HookSignature<void, decltype(ExampleMod::beginPlay)> sig = new HookSignature<void, decltype(ExampleMod::beginPlay)>(std::bind(&ExampleMod::beginPlay, this, _2));
+		//typedef void Sig(ModReturns*, void*);
+		//std::function<Sig> func2 = std::bind(&ExampleMod::beginPlay, this, _1, _2);
+		//LOG("TEST:");
+		//LOG(test(&ExampleMod::beginPlay));
+		//LOG(typeid(decltype(ExampleMod::beginPlay(std::declval<ModReturns*>(), std::declval<void*>()))).name());
+
+		//using Traits = function_traits<decltype(&ExampleMod::beginPlay)>;
+		//LOG(typeid(Traits::return_type).name());
+
+		//auto tuple = std::tuple<void*>(arg<void*>());
+		//auto tuple = create_cache(arg<void*>());
+		//test<int, void*>();
+
+		//SML::Utility::warning("Tuple Type: ", typeid(decltype(tuple2)).name());
+
+		FunctionCache<void, void*> beginPlay;
+		::subscribe(&AFGPlayerController::BeginPlay);
+		//::subscribe(&AFGPlayerController::BeginPlay, std::bind(&ExampleMod::beginPlay, this, _1));
+
+		//subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, _1));
+
+		// SML::HookLoader::subscribe<SML::Event::AFGCharacterPlayerBeginPlay>(array, beginPlay);
 
 		// Use a member function as handler
 		//::subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, this, _1, _2)); //bind the beginPlay function, with placeholder variables
