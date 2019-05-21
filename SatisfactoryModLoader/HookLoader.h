@@ -1,6 +1,5 @@
 #pragma once
 
-#include <util/DetoursFwd.h>
 #include <map>
 #include <vector>
 #include <tuple>
@@ -8,8 +7,7 @@
 #include <iostream>
 #include <functional>
 #include <util/Utility.h>
-#include <Windows.h>
-#include <util/FunctionalUnwrap.h>
+#include <util/DetoursFwd.h>
 
 ///LOG(typeid(decltype(ExampleMod::beginPlay(std::declval<ModReturns*>(), std::declval<void*>()))).name());
 //template <class T>
@@ -110,27 +108,27 @@ struct ModReturns {
 };
 
 /* */
-template <typename... Args>
-struct Types {
-	void create_tuple(Args... args) {
-		auto t = std::tuple<Args...>{ args... };
-	}
-};
-
-
-template <std::size_t I, typename T, typename ...Ts>
-struct nth_element_impl {
-	using type = typename nth_element_impl<I - 1, Ts...>::type;
-};
-
-template <typename T, typename ...Ts>
-struct nth_element_impl<0, T, Ts...> {
-	using type = T;
-};
-
-template <std::size_t I, typename ...Ts>
-using nth_element = typename nth_element_impl<I, Ts...>::type;
-
+//template <typename... Args>
+//struct Types {
+//	void create_tuple(Args... args) {
+//		auto t = std::tuple<Args...>{ args... };
+//	}
+//};
+//
+//
+//template <std::size_t I, typename T, typename ...Ts>
+//struct nth_element_impl {
+//	using type = typename nth_element_impl<I - 1, Ts...>::type;
+//};
+//
+//template <typename T, typename ...Ts>
+//struct nth_element_impl<0, T, Ts...> {
+//	using type = T;
+//};
+//
+//template <std::size_t I, typename ...Ts>
+//using nth_element = typename nth_element_impl<I, Ts...>::type;
+//
 
 
 
@@ -156,59 +154,19 @@ struct function_traits<R(Args...)> {
 
 	static constexpr std::size_t arity = sizeof...(Args);
 
-	/*auto get_argument(size_t arg) {
-		return std::tuple_element<arg, std::tuple<Args...>>::type;
-	}*/
-
-	template <size_t N>
-	struct argument {
-		//using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
-		using type = typename nth_element<N, Args...>;
-	};
-
-	//static void get_arg(size_t i) {
-	//	//using type = nth_element<i, Args...>;
-	//	std::tuple<Args...> tuple {}
-	//}
-
-	//static void get_arg(size_t arg) {
-	//	//return runtine_get(std::tuple<Args...>, arg);
-	//	//auto tup = std::make_tuple(Args...);
-	//	auto t = runtime_get(std::tuple<Args...>, arg);
-	//}
+	//template <size_t N>
+	//struct argument {
+	//	//using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
+	//	using type = typename nth_element<N, Args...>;
+	//};
 };
+
+static void func(){}
 
 template <typename T, typename Handler>
 struct Storage {
 	static std::vector<Handler> hooks;
 	static void* original;
-};
-
-template <typename T, typename R>
-struct HookLoader {
-public:
-	typedef R HandlerSignature(ModReturns*, ...);
-	typedef R ReturnType;
-	typedef std::function<HandlerSignature> Handler;
-
-	static void install() {
-		install_hook();
-	}
-
-private:
-	static constexpr const char _gameModule[] = "FactoryGame-Win64-Shipping.exe";
-
-	typedef R __fastcall HookType(...);
-
-	static void install_hook() {
-		//if (!Storage<T, Handler>::original) {
-			//using Traits = function_traits<T>;
-			//Detours::DetourTransactionBegin();
-			//Storage<T, Handler>::original = Detours::DetourFindFunction(_gameModule, typeid(T).name());
-			//Detours::DetourAttach(&Storage<T, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
-			//Detours::DetourTransactionCommit();
-		//}
-	}
 };
 
 template <typename... Args>
@@ -223,17 +181,76 @@ TupleCache<Args...> create_cache(Args... args) {
 	};
 }
 
-template <typename R, typename... Args>
-struct FunctionCache {
-	typedef R Signature(ModReturns*, Args...);
-	typedef std::function<Signature> Handler;
+template <typename T, typename R, typename... Args>
+struct HookLoader {
+public:
+	typedef R HandlerSignature(ModReturns*, Args...);
+	typedef R ReturnType;
+	typedef std::function<HandlerSignature> Handler;
+
+	static void install() {
+		install_hook();
+	}
+
+private:
+	static constexpr const char _gameModule[] = "FactoryGame-Win64-Shipping.exe";
+
+	typedef R __fastcall HookType(Args...);
+
+	template <typename>
+	static void __fastcall apply_void(Args... args) {
+		ModReturns returns;
+		returns.useOriginalFunction = true;
+
+		for (auto&& handler : Storage<T, Handler>::hooks)
+			handler(&returns, args...);
+
+		if (returns.useOriginalFunction)
+			((HookType*)Storage<T, Handler>::original)(args...);
+	}
+
+	template <typename>
+	static R __fastcall apply(Args... args) {
+		ModReturns returns;
+		returns.useOriginalFunction = true;
+
+		R ret{};
+
+		for (auto&& handler : Storage<T, Handler>::hooks)
+			ret = handler(&returns, args...);
+
+		if (returns.useOriginalFunction)
+			return ((HookType*)Storage<T, Handler>::original)(args...);
+
+		return ret;
+	}
+
+	template <typename X>
+	static HookType* get_apply(std::true_type) {
+		return &apply_void<X>;
+	}
+
+	template <typename X>
+	static HookType* get_apply(std::false_type) {
+		return &apply<X>;
+	}
+
+	static void install_hook() {
+		Detours::DetourTransactionCommit();
+		//if (!Storage<T, Handler>::original) {
+			//Detours::DetourTransactionBegin();
+			/*Storage<T, Handler>::original = Detours::DetourFindFunction(_gameModule, typeid(T).name());
+			Detours::DetourAttach(&Storage<T, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
+			Detours::DetourTransactionCommit();*/
+			//SML::Utility::warning("Installed hook: ", typeid(T).name());
+		//}
+	}
 };
 
-template <class Original>
-void subscribe(Original original) {
+template <class Original, typename Hook, typename... Args>
+void subscribe(Original original, Hook hook, Args... args) {
 	using Traits = function_traits<Original>;
-	// get return type of original
-	SML::Utility::warning("Return Type: ", typeid(Traits::return_type).name());
+	HookLoader<Original, Traits::return_type, Args...>::install();
 }
 
 //template <class F, class H>

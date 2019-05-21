@@ -68,26 +68,6 @@ Mod::Info modInfo {
 // The second is a pointer to an object of the base class of the function, which in this case is AFGPlayerController.
 //int fn(int) { return int(); }
 
-//template <typename F, typename R = std::result_of<F()>>
-//R call(F& f) {
-//	return f();
-//}
-//
-//template <class T>
-//auto test(T t) -> decltype(t) {
-//	return t;
-//}
-
-template <typename T>
-auto arg() -> decltype(std::declval<T>()) {
-	return std::declval<T>();
-}
-
-template <typename... T>
-void test() {
-	
-}
-
 // The mod's class, put all functions inside here
 class ExampleMod : public Mod {
 	void beginPlay(ModReturns* returns, void* player) {
@@ -123,8 +103,11 @@ public:
 
 		//SML::Utility::warning("Tuple Type: ", typeid(decltype(tuple2)).name());
 
-		FunctionCache<void, void*> beginPlay;
-		::subscribe(&AFGPlayerController::BeginPlay);
+		//FunctionCache<void, void*> beginPlay;
+		::subscribe(
+			&AFGPlayerController::BeginPlay, 
+			std::bind(&ExampleMod::beginPlay, this, _1),
+			&func);
 		//::subscribe(&AFGPlayerController::BeginPlay, std::bind(&ExampleMod::beginPlay, this, _1));
 
 		//subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, _1));
