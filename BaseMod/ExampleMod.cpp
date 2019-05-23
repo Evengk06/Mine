@@ -63,6 +63,12 @@ Mod::Info modInfo {
 	{}
 };
 
+void beginPlay(ModReturns* returns, void* playerIn) {
+	LOG("Got Player");
+	player = playerIn;
+	SML::Utility::info_mod(MOD_NAME, "Player: ", player);
+}
+
 // Function to be hooked
 // Every hook has two parameters at the start, even when the target function does not have any parameters.
 // The first is a pointer to ModReturns, which allows you to disable SML calling the function after your hook.
@@ -71,13 +77,6 @@ Mod::Info modInfo {
 
 // The mod's class, put all functions inside here
 class ExampleMod : public Mod {
-
-	void beginPlay(ModReturns* returns, void* playerIn) {
-		LOG("Got Player");
-		player = playerIn;
-		SML::Utility::info_mod(MOD_NAME, "Player: ", player);
-	}
-
 public:
 	// Constructor for SML usage, do not rename!
 	ExampleMod() : Mod(modInfo) {
@@ -105,13 +104,18 @@ public:
 
 		//SML::Utility::warning("Tuple Type: ", typeid(decltype(tuple2)).name());
 
+		//std::function<void(ModReturns*, void*)> ff = beginPlay;
+
+		//std::function<HookInfo<AFGPlayerController::BeginPlay, void*>::function_type> ff2 = beginPlay;
+
+		::_subscribe<&AFGPlayerController::BeginPlay, &beginPlay, void*>();
 		//FunctionCache<void, void*> beginPlay;
-		::subscribe(
-			&AFGPlayerController::BeginPlay,
-			HookName<&AFGPlayerController::BeginPlay>::name,
-			//&beginPlay,
-			std::bind(&ExampleMod::beginPlay, this, _1),
-			&func);
+		//::subscribe(
+		//	&AFGPlayerController::BeginPlay,
+		//	HookName<&AFGPlayerController::BeginPlay>::name,
+		//	//&beginPlay,
+		//	std::bind(&ExampleMod::beginPlay, this, _1),
+		//	&func);
 		//::subscribe(&AFGPlayerController::BeginPlay, std::bind(&ExampleMod::beginPlay, this, _1));
 
 		//subscribe<&AFGPlayerController::BeginPlay>(std::bind(&ExampleMod::beginPlay, _1));

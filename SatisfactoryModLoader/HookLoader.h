@@ -8,45 +8,19 @@
 #include <functional>
 #include "util/Utility.h"
 #include "util/DetoursFwd.h"
+#include "util/FunctionTraits.h"
+#include "util/TypeNames.h"
 
 /* */
 struct ModReturns {
 	bool useOriginalFunction = true;
 };
 
-template <class F>
-struct function_traits;
-
-template <class R, class...Args>
-struct function_traits<R(*)(Args...)> : public function_traits<R(Args...)> {};
-
-template <class C, class R, class... Args>
-struct function_traits<R(C::*)(Args...)> : public function_traits<R(C&, Args...)> {};
-
-template<class C, class R, class... Args>
-struct function_traits<R(C::*)(Args...) const> : public function_traits<R(C&, Args...)> {};
-
-template<class C, class R>
-struct function_traits<R(C::*)> : public function_traits<R(C&)> {};
-
-template <class R, class... Args>
-struct function_traits<R(Args...)> {
-	using return_type = R;
-
-	static constexpr std::size_t arity = sizeof...(Args);
-
-	template <size_t N>
-	struct argument {
-		using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
-		//using type = typename nth_element<N, Args...>;
-	};
-};
-
 static inline void func(){}
 
-template <typename T, typename Handler>
+template <typename T, typename H>
 struct Storage {
-	static inline std::vector<Handler> hooks;
+	static inline std::vector<H> hooks;
 	static inline void* original;
 };
 
@@ -62,27 +36,31 @@ TupleCache<Args...> create_cache(Args... args) {
 	};
 }
 
-template <typename T, typename R, typename... Args>
+template <auto T, typename R, auto T2, typename... Args>
 class HookLoader {
 public:
+	typedef decltype(T) O;
+	typedef decltype(T2) H;
 	typedef R HandlerSignature(ModReturns*, Args...);
 	typedef R ReturnType;
 	typedef std::function<HandlerSignature> Handler;
 
-	static void install(const char* originalName, Handler hook) {
-		if (!Storage<T, Handler>::original) {
+	static void install() {
+		const char* originalName = HookInfo<T, Args...>::name;
+		if (!Storage<O, Handler>::original) {
 			Detours::DetourTransactionBegin();
-			Storage<T, Handler>::original = Detours::DetourFindFunction(_gameModule, originalName);
-			if (!Storage<T, Handler>::original) {
+			Storage<O, Handler>::original = Detours::DetourFindFunction(_gameModule, originalName);
+			if (!Storage<O, Handler>::original) {
 				SML::Utility::warning("Invalid function: ", originalName);
 				return;
 			}
-			Detours::DetourAttach(&Storage<T, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
+			Detours::DetourAttach(&Storage<O, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
 			Detours::DetourTransactionCommit();
 			SML::Utility::warning("Installed function: ", originalName);
 		}
 
-		Storage<T, Handler>::hooks.push_back(hook);
+		std::function<HookInfo<T, Args...>::function_type> hook = T2;
+		Storage<O, Handler>::hooks.push_back(hook);
 	}
 
 private:
@@ -97,13 +75,13 @@ private:
 		ModReturns returns;
 		returns.useOriginalFunction = true;
 
-		SML::Utility::warning("Hooks: ", Storage<T, Handler>::hooks.size());
+		SML::Utility::warning("Hooks: ", Storage<O, Handler>::hooks.size());
 
-		for (auto&& handler : Storage<T, Handler>::hooks)
+		for (auto&& handler : Storage<O, Handler>::hooks)
 			handler(&returns, args...);
 
 		if (returns.useOriginalFunction)
-			((HookType*)Storage<T, Handler>::original)(args...);
+			((HookType*)Storage<O, Handler>::original)(args...);
 	}
 
 	template <typename>
@@ -113,11 +91,11 @@ private:
 
 		R ret{};
 
-		for (auto&& handler : Storage<T, Handler>::hooks)
+		for (auto&& handler : Storage<O, Handler>::hooks)
 			ret = handler(&returns, args...);
 
 		if (returns.useOriginalFunction)
-			return ((HookType*)Storage<T, Handler>::original)(args...);
+			return ((HookType*)Storage<O, Handler>::original)(args...);
 
 		return ret;
 	}
@@ -133,12 +111,8 @@ private:
 	}
 };
 
-template <class Original, typename Hook, typename... Args>
-void subscribe(Original original, const char* originalName, Hook hook, Args... args) {
-	using Traits = function_traits<Original>;
-
-	SML::Utility::warning("Hook: ", typeid(Hook).name());
-	SML::Utility::warning("Wanting: ", typeid(HookLoader<Original, Traits::return_type, Args...>::Handler).name());
-
-	//HookLoader<Original, Traits::return_type, Args...>::install(originalName, hook);
+template <auto Original, auto Hook, typename... Args>
+void _subscribe() {
+	using Traits = function_traits<decltype(Original)>;
+	HookLoader<Original, Traits::return_type, Hook, Args...>::install();
 }

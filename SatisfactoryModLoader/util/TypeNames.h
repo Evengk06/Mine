@@ -1,6 +1,17 @@
 #pragma once
-template <auto T>
-struct HookName;
 
-#define DEFINE_METHOD(X) \
-template<> struct HookName<&X> { static constexpr const char name[] = #X; };
+#include <functional>
+#include "util/FunctionTraits.h"
+#include "HookLoader.h"
+
+template <auto T, typename... Args>
+struct HookInfo;
+
+#define DEFINE_METHOD(X, ...) \
+template<> struct HookInfo<&X, __VA_ARGS__> { \
+static constexpr const char name[] = #X; \
+using traits = function_traits<decltype(&X)>; \
+typedef traits::return_type(function_type)(ModReturns*, __VA_ARGS__); \
+};
+
+//typedef traits::return_type(__VA_ARGS__) function_type; \
