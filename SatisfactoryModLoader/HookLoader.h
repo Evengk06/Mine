@@ -112,7 +112,7 @@ private:
 };
 
 template <auto Original, auto Hook, typename... Args>
-void _subscribe() {
+void subscribe() {
 	using Traits = function_traits<decltype(Original)>;
 	HookLoader<Original, Traits::return_type, Hook, Args...>::install();
 }

@@ -13,5 +13,3 @@ static constexpr const char name[] = #X; \
 using traits = function_traits<decltype(&X)>; \
 typedef traits::return_type(function_type)(ModReturns*, __VA_ARGS__); \
 };
-
-//typedef traits::return_type(__VA_ARGS__) function_type; \

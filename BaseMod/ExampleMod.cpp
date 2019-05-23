@@ -108,7 +108,7 @@ public:
 
 		//std::function<HookInfo<AFGPlayerController::BeginPlay, void*>::function_type> ff2 = beginPlay;
 
-		::_subscribe<&AFGPlayerController::BeginPlay, &beginPlay, void*>();
+		::subscribe<&AFGPlayerController::BeginPlay, &beginPlay, void*>();
 		//FunctionCache<void, void*> beginPlay;
 		//::subscribe(
 		//	&AFGPlayerController::BeginPlay,
