@@ -6,8 +6,8 @@
 #include <cassert>
 #include <iostream>
 #include <functional>
-#include <util/Utility.h>
-#include <util/DetoursFwd.h>
+#include "util/Utility.h"
+#include "util/DetoursFwd.h"
 
 /* */
 struct ModReturns {
@@ -35,19 +35,19 @@ struct function_traits<R(Args...)> {
 
 	static constexpr std::size_t arity = sizeof...(Args);
 
-	//template <size_t N>
-	//struct argument {
-	//	//using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
-	//	using type = typename nth_element<N, Args...>;
-	//};
+	template <size_t N>
+	struct argument {
+		using type = typename std::tuple_element<N, std::tuple<Args...>>::type;
+		//using type = typename nth_element<N, Args...>;
+	};
 };
 
-static void func(){}
+static inline void func(){}
 
 template <typename T, typename Handler>
 struct Storage {
-	static std::vector<Handler> hooks;
-	static void* original;
+	static inline std::vector<Handler> hooks;
+	static inline void* original;
 };
 
 template <typename... Args>
@@ -69,8 +69,20 @@ public:
 	typedef R ReturnType;
 	typedef std::function<HandlerSignature> Handler;
 
-	static void install() {
-		install_hook();
+	static void install(const char* originalName, Handler hook) {
+		if (!Storage<T, Handler>::original) {
+			Detours::DetourTransactionBegin();
+			Storage<T, Handler>::original = Detours::DetourFindFunction(_gameModule, originalName);
+			if (!Storage<T, Handler>::original) {
+				SML::Utility::warning("Invalid function: ", originalName);
+				return;
+			}
+			Detours::DetourAttach(&Storage<T, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
+			Detours::DetourTransactionCommit();
+			SML::Utility::warning("Installed function: ", originalName);
+		}
+
+		Storage<T, Handler>::hooks.push_back(hook);
 	}
 
 private:
@@ -80,8 +92,12 @@ private:
 
 	template <typename>
 	static void __fastcall apply_void(Args... args) {
+		SML::Utility::warning("Hook being used");
+
 		ModReturns returns;
 		returns.useOriginalFunction = true;
+
+		SML::Utility::warning("Hooks: ", Storage<T, Handler>::hooks.size());
 
 		for (auto&& handler : Storage<T, Handler>::hooks)
 			handler(&returns, args...);
@@ -115,21 +131,14 @@ private:
 	static HookType* get_apply(std::false_type) {
 		return &apply<X>;
 	}
-
-	static void install_hook() {
-		//Detours::DetourTransactionCommit();
-		if (!Storage<T, Handler>::original) {
-			//Detours::DetourTransactionBegin();
-			/*Storage<T, Handler>::original = Detours::DetourFindFunction(_gameModule, typeid(T).name());
-			Detours::DetourAttach(&Storage<T, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
-			Detours::DetourTransactionCommit();*/
-			//SML::Utility::warning("Installed hook: ", typeid(T).name());
-		}
-	}
 };
 
 template <class Original, typename Hook, typename... Args>
-void subscribe(Original original, Hook hook, Args... args) {
+void subscribe(Original original, const char* originalName, Hook hook, Args... args) {
 	using Traits = function_traits<Original>;
-	HookLoader<Original, Traits::return_type, Args...>::install();
+
+	SML::Utility::warning("Hook: ", typeid(Hook).name());
+	SML::Utility::warning("Wanting: ", typeid(HookLoader<Original, Traits::return_type, Args...>::Handler).name());
+
+	//HookLoader<Original, Traits::return_type, Args...>::install(originalName, hook);
 }

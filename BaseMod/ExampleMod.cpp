@@ -7,6 +7,7 @@
 #include <util/JsonConfig.h>
 #include <iostream>
 #include <type_traits>
+#include "util/TypeNames.h"
 
 using namespace SML::Mod;
 using namespace SML::Objects;
@@ -70,10 +71,11 @@ Mod::Info modInfo {
 
 // The mod's class, put all functions inside here
 class ExampleMod : public Mod {
-	void beginPlay(ModReturns* returns, void* player) {
+
+	void beginPlay(ModReturns* returns, void* playerIn) {
 		LOG("Got Player");
-		//player = playerIn;
-		//SML::Utility::info_mod(MOD_NAME, "Player: ", player);
+		player = playerIn;
+		SML::Utility::info_mod(MOD_NAME, "Player: ", player);
 	}
 
 public:
@@ -105,7 +107,9 @@ public:
 
 		//FunctionCache<void, void*> beginPlay;
 		::subscribe(
-			&AFGPlayerController::BeginPlay, 
+			&AFGPlayerController::BeginPlay,
+			HookName<&AFGPlayerController::BeginPlay>::name,
+			//&beginPlay,
 			std::bind(&ExampleMod::beginPlay, this, _1),
 			&func);
 		//::subscribe(&AFGPlayerController::BeginPlay, std::bind(&ExampleMod::beginPlay, this, _1));

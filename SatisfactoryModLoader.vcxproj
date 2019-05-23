@@ -70,8 +70,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(MSBuildProjectDirectory)\xinput1_3\detours;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\xinput1_3\detours;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\Detours\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\Detours\src;$(LibraryPath)</LibraryPath>
     <TargetName>xinput1_3</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -142,6 +142,7 @@
       <AssemblyDebug>true</AssemblyDebug>
       <ModuleDefinitionFile>$(ProjectDir)xinput1_3\xinput1_3.def</ModuleDefinitionFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\xinput1_3\detours;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -175,6 +176,7 @@
     <ClInclude Include="SatisfactoryModLoader\util\json.hpp" />
     <ClInclude Include="SatisfactoryModLoader\util\JsonConfig.h" />
     <ClInclude Include="SatisfactoryModLoader\util\Reflection.h" />
+    <ClInclude Include="SatisfactoryModLoader\util\TypeNames.h" />
     <ClInclude Include="SatisfactoryModLoader\util\Utility.h" />
     <ClInclude Include="SatisfactorySDK\SDK.hpp" />
   </ItemGroup>

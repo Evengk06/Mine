@@ -2,6 +2,7 @@
 
 #include <util/FString.h>
 #include "HookLoader.h"
+#include "util/TypeNames.h"
 
 #pragma warning (push)
 #pragma warning (disable: 4667)
@@ -30,6 +31,8 @@ namespace SML {
 			void OnAttentionPingPressed();
 			void Suicide();
 		};
+
+		DEFINE_METHOD(AFGPlayerController::BeginPlay);
 
 		class UFGInventoryComponent {
 		public:
