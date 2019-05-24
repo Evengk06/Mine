@@ -2,7 +2,10 @@
 
 #include <functional>
 #include "util/FunctionTraits.h"
-#include "HookLoader.h"
+
+struct ModReturns {
+	bool useOriginalFunction = true;
+};
 
 template <auto T, typename... Args>
 struct HookInfo;

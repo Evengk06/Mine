@@ -7,6 +7,7 @@
 #endif
 
 #include "SF_FactoryGame_structs.hpp"
+#include "util/TypeNames.h"
 
 namespace SDK
 {
@@ -8088,6 +8089,9 @@ public:
 	void Client_AddMessage(class UClass* newMessage);
 	void CheckPawnMapArea();
 };
+
+DEFINE_METHOD(AFGPlayerController::OnPrimaryFire, void*);
+DEFINE_METHOD(AFGPlayerController::Suicide, void*);
 
 
 // Class FactoryGame.FGPlayerStartTradingPost

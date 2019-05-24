@@ -38,7 +38,7 @@ void killPlayer(Functions::CommandData data) {
 		LOG(s);
 	}
 	LOG("Killed Player");
-	::call<&AFGPlayerController::Suicide>(player);
+	::call<&SDK::AFGPlayerController::Suicide>(player);
 }
 
 // information about the mod
@@ -67,6 +67,10 @@ void beginPlay(ModReturns* returns, void* playerIn) {
 	LOG("Got Player");
 	player = playerIn;
 	SML::Utility::info_mod(MOD_NAME, "Player: ", player);
+}
+
+void onPrimaryFire(ModReturns* returns, void* playerIn) {
+
 }
 
 // Function to be hooked

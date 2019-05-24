@@ -11,11 +11,6 @@
 #include "util/FunctionTraits.h"
 #include "util/TypeNames.h"
 
-/* */
-struct ModReturns {
-	bool useOriginalFunction = true;
-};
-
 static inline void func(){}
 
 template <typename T, typename H>
