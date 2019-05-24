@@ -33,6 +33,7 @@ namespace SML {
 		};
 
 		DEFINE_METHOD(AFGPlayerController::BeginPlay, void*);
+		DEFINE_METHOD(AFGPlayerController::Suicide, void*);
 
 		class UFGInventoryComponent {
 		public:

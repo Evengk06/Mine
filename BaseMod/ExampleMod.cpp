@@ -38,7 +38,7 @@ void killPlayer(Functions::CommandData data) {
 		LOG(s);
 	}
 	LOG("Killed Player");
-	//::call<&AFGPlayerController::Suicide>(player);
+	::call<&AFGPlayerController::Suicide>(player);
 }
 
 // information about the mod

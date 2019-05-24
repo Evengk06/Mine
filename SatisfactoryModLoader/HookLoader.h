@@ -44,29 +44,24 @@ public:
 	typedef R HandlerSignature(ModReturns*, Args...);
 	typedef R ReturnType;
 	typedef std::function<HandlerSignature> Handler;
+	typedef R __fastcall HookType(Args...);
+
+	typedef R HandlerSignatureNone(Args...);
+	typedef std::function<HandlerSignatureNone> HandlerNone;
 
 	static void install() {
-		const char* originalName = HookInfo<T, Args...>::name;
-		if (!Storage<O, Handler>::original) {
-			Detours::DetourTransactionBegin();
-			Storage<O, Handler>::original = Detours::DetourFindFunction(_gameModule, originalName);
-			if (!Storage<O, Handler>::original) {
-				SML::Utility::warning("Invalid function: ", originalName);
-				return;
-			}
-			Detours::DetourAttach(&Storage<O, Handler>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
-			Detours::DetourTransactionCommit();
-			SML::Utility::warning("Installed function: ", originalName);
-		}
-
+		_install<Handler>();
 		std::function<HookInfo<T, Args...>::function_type> hook = T2;
 		Storage<O, Handler>::hooks.push_back(hook);
 	}
 
+	static HookType* get_original() {
+		_install<HandlerNone>();
+		return (HookType*)Storage<O, HandlerNone>::original;
+	}
+
 private:
 	static constexpr const char _gameModule[] = "FactoryGame-Win64-Shipping.exe";
-
-	typedef R __fastcall HookType(Args...);
 
 	template <typename>
 	static void __fastcall apply_void(Args... args) {
@@ -109,10 +104,33 @@ private:
 	static HookType* get_apply(std::false_type) {
 		return &apply<X>;
 	}
+
+	template <typename F>
+	static void _install() {
+		const char* originalName = HookInfo<T, Args...>::name;
+		SML::Utility::warning("Name: ", originalName);
+		if (!Storage<O, F>::original) {
+			Detours::DetourTransactionBegin();
+			Storage<O, F>::original = Detours::DetourFindFunction(_gameModule, originalName);
+			if (!Storage<O, F>::original) {
+				SML::Utility::warning("Invalid function: ", originalName);
+				return;
+			}
+			Detours::DetourAttach(&Storage<O, F>::original, (void*)get_apply<R>(std::is_same<R, void>{}));
+			Detours::DetourTransactionCommit();
+			SML::Utility::warning("Installed function: ", originalName);
+		}
+	}
 };
 
 template <auto Original, auto Hook, typename... Args>
 void subscribe() {
 	using Traits = function_traits<decltype(Original)>;
 	HookLoader<Original, Traits::return_type, Hook, Args...>::install();
+}
+
+template <auto Original, typename... Args>
+void call(Args... args) {
+	using Traits = function_traits<decltype(Original)>;
+	return HookLoader<Original, Traits::return_type, nullptr, Args...>::get_original()(args...);
 }
