@@ -153,6 +153,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SatisfactoryModLoader\AbstractedMembers.h" />
+    <ClInclude Include="SatisfactoryModLoader\Abstraction.h" />
     <ClInclude Include="SatisfactoryModLoader\HookLoader.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Etc.h" />
     <ClInclude Include="SatisfactoryModLoader\game\Global.h" />

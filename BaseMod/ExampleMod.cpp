@@ -8,6 +8,8 @@
 #include <iostream>
 #include <type_traits>
 #include "util/TypeNames.h"
+#include "Abstraction.h"
+#include <utility>
 
 using namespace SML::Mod;
 using namespace SML::Objects;
@@ -38,7 +40,7 @@ void killPlayer(Functions::CommandData data) {
 		LOG(s);
 	}
 	LOG("Killed Player");
-	::call<&SDK::AFGPlayerController::Suicide>(player);
+	//::call<&SDK::AFGPlayerController::Suicide>(player);
 }
 
 // information about the mod
@@ -69,6 +71,10 @@ void beginPlay(ModReturns* returns, void* playerIn) {
 	SML::Utility::info_mod(MOD_NAME, "Player: ", player);
 }
 
+void enterChatMessage(ModReturns* returns, FString *inMessage) {
+
+}
+
 void onPrimaryFire(ModReturns* returns, void* playerIn) {
 
 }
@@ -78,6 +84,32 @@ void onPrimaryFire(ModReturns* returns, void* playerIn) {
 // The first is a pointer to ModReturns, which allows you to disable SML calling the function after your hook.
 // The second is a pointer to an object of the base class of the function, which in this case is AFGPlayerController.
 //int fn(int) { return int(); }
+
+template <typename... Args>
+void testFunc() {
+
+}
+
+template <typename> struct save_it_for_later_t;
+template <typename Result, typename... Args>
+struct save_it_for_later_t<Result(*)(Args...)> {
+	std::tuple<Args...>   params;
+	Result(*fun)(Args...);
+	template <typename... Params>
+	save_it_for_later_t(Result(*fun)(Args...), Params&&... params)
+		: params(std::forward<Params>(params)...)
+		, fun(fun) {
+	}
+	// ... 
+};
+template <typename Result, typename... Args, typename... Params>
+save_it_for_later_t<Result(*)(Args...)>
+save_it_for_later(Result(*fun)(Args...), Params&&... params) {
+	return save_it_for_later_t<Result(*)(Args...)>(fun, std::forward<Params>(params)...);
+}
+
+double foo(float, float, double);
+
 
 // The mod's class, put all functions inside here
 class ExampleMod : public Mod {
@@ -112,7 +144,10 @@ public:
 
 		//std::function<HookInfo<AFGPlayerController::BeginPlay, void*>::function_type> ff2 = beginPlay;
 
-		::subscribe<&AFGPlayerController::BeginPlay, &beginPlay, void*>();
+		::subscribe<Player::BeginPlay, &beginPlay>();
+
+		//::subscribe<&AFGPlayerController::BeginPlay, &beginPlay, void*>();
+		//::subscribe<&AFGPlayerController::EnterChatMessage, &enterChatMessage, FString*>();
 		//FunctionCache<void, void*> beginPlay;
 		//::subscribe(
 		//	&AFGPlayerController::BeginPlay,

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <util/FString.h>
-#include "HookLoader.h"
+//#include "HookLoader.h"
 #include "util/TypeNames.h"
 
 #pragma warning (push)
@@ -33,6 +33,7 @@ namespace SML {
 		};
 
 		DEFINE_METHOD(AFGPlayerController::BeginPlay, void*);
+		DEFINE_METHOD(AFGPlayerController::EnterChatMessage, FString*);
 		DEFINE_METHOD(AFGPlayerController::Suicide, void*);
 
 		class UFGInventoryComponent {

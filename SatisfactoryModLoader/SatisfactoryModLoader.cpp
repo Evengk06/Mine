@@ -14,6 +14,7 @@
 #include <util/Reflection.h>
 #include <util/JsonConfig.h>
 #include <mod/Hooks.h>
+#include "Abstraction.h"
 
 namespace SML {
 	const char* logName = "SatisfactoryModLoader.log";
@@ -49,6 +50,9 @@ namespace SML {
 		// load sdk
 		SDK::InitSDK();
 		Utility::info("Initialized SDK");
+
+		// load abstractions
+		setupAbstraction();
 
 		// get path
 		char p[MAX_PATH];
