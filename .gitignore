@@ -26,3 +26,5 @@ x86
 *.vbproj.user
 ipch
 *sdf
+#Autohooker data
+SatisfactoryModLoader/game/autogenerator/data/*

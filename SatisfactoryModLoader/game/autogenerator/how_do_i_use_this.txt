@@ -1,0 +1,12 @@
+This is the SML Autohooker, a tool that generates a header file that has a hookable function definition for every single function in the EXE.
+Most people don't need to use this, it's mostly just for me (SuperCoder) to use whenever Satisfactory updates.
+Required tools:
+* Python 3.0+
+* Patience as you wait for everything to decompile
+Steps:
+1. Make a folder in the directory where you found this named "data".
+2. Get FactoryGame-Win64-Shippinhh.pdb and put it in the data folder.
+3. Using an *ADMINISTRATOR* Command Prompt or Powershell run the command "regsvr32 msdia140.dll" without the quotes.
+4. Run the command "SML_AutoDumper.exe -s .\data\FactoryGame-Win64-Shipping.pdb" without the quotes. This will take a long time to finish.
+5. Run SML_AutoHooker.py with Python 3.0 or higher.
+6. Pray that everything generated properly and can compile.
