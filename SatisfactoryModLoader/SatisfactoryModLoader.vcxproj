@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{40237398-4B3F-4F7A-9A60-78683EA1693A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SatisfactoryModLoader</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\xinput1_3\detours;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\xinput1_3\detours;$(LibraryPath)</LibraryPath>
+    <TargetName>xinput1_3</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;SATISFACTORYMODLOADER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\zip\ttvfs_zip;$(MSBuildProjectDirectory)\zip\ttvfs;$(SolutionDir)\Detours\src;%(AdditionalIncludeDirectories);$(MSBuildProjectDirectory);$(SolutionDir)\SatisfactorySDK\SDK</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <ModuleDefinitionFile>$(SolutionDir)\xinput1_3\xinput1_3.def</ModuleDefinitionFile>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalDependencies>$(ProjectDir)\ttvfs_zip.lib;$(ProjectDir)\ttvfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)\xinput1_3\detours;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="assets\BPInterface.h" />
+    <ClInclude Include="assets\AssetFunctions.h" />
+    <ClInclude Include="assets\AssetLoader.h" />
+    <ClInclude Include="assets\FObjectSpawnParameters.h" />
+    <ClInclude Include="Configs.h" />
+    <ClInclude Include="game\Etc.h" />
+    <ClInclude Include="game\Global.h" />
+    <ClInclude Include="game\Input.h" />
+    <ClInclude Include="game\Player.h" />
+    <ClInclude Include="game\SDKHooks.h" />
+    <ClInclude Include="game\UI.h" />
+    <ClInclude Include="game\Utility.h" />
+    <ClInclude Include="HookLoader.h" />
+    <ClInclude Include="HookLoaderInternal.h" />
+    <ClInclude Include="Lib.h" />
+    <ClInclude Include="memory\MemoryFunctions.h" />
+    <ClInclude Include="memory\MemoryObject.h" />
+    <ClInclude Include="mod\Coremods.h" />
+    <ClInclude Include="mod\Hooks.h" />
+    <ClInclude Include="mod\MathFunctions.h" />
+    <ClInclude Include="mod\Mod.h" />
+    <ClInclude Include="mod\ModFunctions.h" />
+    <ClInclude Include="mod\ModHandler.h" />
+    <ClInclude Include="mod\Registry.h" />
+    <ClInclude Include="mod\ZipHandler.h" />
+    <ClInclude Include="SatisfactoryModLoader.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="util\DetoursFwd.h" />
+    <ClInclude Include="util\Objects\Delegate.h" />
+    <ClInclude Include="util\Objects\FFrame.h" />
+    <ClInclude Include="util\EnvironmentValidity.h" />
+    <ClInclude Include="util\FKey.h" />
+    <ClInclude Include="util\Objects\FGuid.h" />
+    <ClInclude Include="util\Objects\FMemory.h" />
+    <ClInclude Include="util\Objects\FName.h" />
+    <ClInclude Include="util\Objects\FQuat.h" />
+    <ClInclude Include="util\Objects\FStack.h" />
+    <ClInclude Include="util\Objects\FString.h" />
+    <ClInclude Include="util\json.hpp" />
+    <ClInclude Include="util\JsonConfig.h" />
+    <ClInclude Include="util\Objects\FTransform.h" />
+    <ClInclude Include="util\Objects\FVector.h" />
+    <ClInclude Include="util\Objects\FOutputDevice.h" />
+    <ClInclude Include="util\Objects\SmartPointer.h" />
+    <ClInclude Include="util\Objects\UEnum.h" />
+    <ClInclude Include="util\Objects\TArray.h" />
+    <ClInclude Include="util\Objects\UClass.h" />
+    <ClInclude Include="util\Objects\UField.h" />
+    <ClInclude Include="util\Objects\UFunction.h" />
+    <ClInclude Include="util\Objects\UObject.h" />
+    <ClInclude Include="util\Objects\UProperty.h" />
+    <ClInclude Include="util\Objects\UStruct.h" />
+    <ClInclude Include="util\Logging.h" />
+    <ClInclude Include="util\Utility.h" />
+    <ClInclude Include="assets\SatisfactoryPakLoader.h" />
+    <ClInclude Include="zip\MemoryModule.h" />
+    <ClInclude Include="..\SatisfactorySDK\SDK.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="assets\BPInterface.cpp" />
+    <ClCompile Include="assets\AssetFunctions.cpp" />
+    <ClCompile Include="assets\AssetLoader.cpp" />
+    <ClCompile Include="Configs.cpp" />
+    <ClCompile Include="game\API.cpp" />
+    <ClCompile Include="game\Etc.cpp" />
+    <ClCompile Include="game\Global.cpp" />
+    <ClCompile Include="game\Player.cpp" />
+    <ClCompile Include="Lib.cpp" />
+    <ClCompile Include="memory\MemoryFunctions.cpp" />
+    <ClCompile Include="memory\MemoryObject.cpp" />
+    <ClCompile Include="mod\Coremods.cpp" />
+    <ClCompile Include="mod\Hooks.cpp" />
+    <ClCompile Include="mod\MathFunctions.cpp" />
+    <ClCompile Include="mod\Mod.cpp" />
+    <ClCompile Include="mod\ModFunctions.cpp" />
+    <ClCompile Include="mod\ModHandler.cpp" />
+    <ClCompile Include="SatisfactoryModLoader.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="util\Objects\Delegate.cpp" />
+    <ClCompile Include="util\Objects\FGuid.cpp" />
+    <ClCompile Include="util\Objects\FMemory.cpp" />
+    <ClCompile Include="util\Objects\FName.cpp" />
+    <ClCompile Include="util\Objects\FString.cpp" />
+    <ClCompile Include="util\Objects\SmartPointer.cpp" />
+    <ClCompile Include="util\Objects\UStruct.cpp" />
+    <ClCompile Include="util\Objects\UClass.cpp" />
+    <ClCompile Include="util\Objects\UField.cpp" />
+    <ClCompile Include="util\Objects\UFunction.cpp" />
+    <ClCompile Include="util\Objects\UObject.cpp" />
+    <ClCompile Include="util\Objects\UProperty.cpp" />
+    <ClCompile Include="util\EnvironmentValidity.cpp" />
+    <ClCompile Include="util\Logging.cpp" />
+    <ClCompile Include="util\Utility.cpp" />
+    <ClCompile Include="mod\ZipHandler.cpp" />
+    <ClCompile Include="zip\MemoryModule.c" />
+    <ClCompile Include="assets\SatisfactoryPakLoader.cpp" />
+    <ClCompile Include="..\SatisfactorySDK\SDK\FG_Basic.cpp" />
+    <ClCompile Include="..\SatisfactorySDK\SDK\FG_CoreUObject_functions.cpp" />
+    <ClCompile Include="..\SatisfactorySDK\SDK\FG_Engine_functions.cpp" />
+    <ClCompile Include="..\SatisfactorySDK\SDK\FG_FactoryGame_functions.cpp" />
+    <ClCompile Include="..\xinput1_3\xinput1_3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Detours\Detours.vcxproj">
+      <Project>{160cf85a-4f6c-4dda-83bf-2a7a00ee55bc}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\xinput1_3\xinput1_3.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\xinput1_3\xinput1_3_asm.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ttvfs.lib">
+      <DeploymentContent>true</DeploymentContent>
+    </Library>
+    <Library Include="ttvfs_zip.lib">
+      <DeploymentContent>true</DeploymentContent>
+    </Library>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

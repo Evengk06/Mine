@@ -47,7 +47,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;BASEMOD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)Detours\src;$(SolutionDir)SatisfactoryModLoader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Detours\src;$(SolutionDir)\SatisfactoryModLoader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
@@ -79,7 +79,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SatisfactoryModLoader.vcxproj">
+    <ProjectReference Include="..\SatisfactoryModLoader\SatisfactoryModLoader.vcxproj">
       <Project>{40237398-4b3f-4f7a-9a60-78683ea1693a}</Project>
     </ProjectReference>
   </ItemGroup>
