@@ -7,6 +7,7 @@
 //Brabb3l: hmmm...
 //SC79: we should also use namespaces at some point(tm)
 //SC79 wearing an alpaca mask: plz respond im lonely
+//Pana: It'se me, Mario
 
 void SML::Objects::AFGPlayerController::BeginPlay() {}
 
@@ -21,5 +22,3 @@ void SML::Objects::AFGStorySubsystem::BeginPlay() { }
 void SML::Objects::AFGGameMode::InitGameState() { }
 
 SML::Objects::FString* SML::Objects::UWorld::GetMapName(SML::Objects::FString* f) { return nullptr; }
-
-bool SML::Objects::UObject::CallFunctionByNameWithArguments(const wchar_t* Str, FOutputDevice* Ar, SDK::UObject* Executor, bool bForceCallWithNonExec) { return false; }

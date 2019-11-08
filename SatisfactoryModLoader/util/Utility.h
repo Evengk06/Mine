@@ -8,6 +8,13 @@
 #include "../Lib.h"
 
 namespace SML {
+	namespace Objects {
+		/*
+		* initializes the BPI Objects
+		*/
+		SML_API void initObjects();
+	}
+
 	namespace Utility {
 
 		void displayCrash(std::string crashText);

@@ -1,5 +1,6 @@
 #include <stdafx.h>
 #include "Hooks.h"
+#include <Windows.h>
 #include <detours.h>
 #include <stdio.h> 
 #include <sstream>
@@ -14,6 +15,7 @@
 #include <assets/AssetLoader.h>
 #include <mod/Coremods.h>
 #include <filesystem>
+#include <assets/BPInterface.h>
 #include <assets/SatisfactoryPakLoader.h>
 
 using namespace std::placeholders;
@@ -42,6 +44,7 @@ namespace SML {
 
 			// Initialize the Pakloader
 			Paks::initPakLoader();
+			Paks::initBPInterface();
 
 			Utility::info("Registered hooks!");
 

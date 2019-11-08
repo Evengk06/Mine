@@ -7,6 +7,8 @@
 #include <game/Global.h>
 #include <game/Player.h>
 #include <util/Utility.h>
+#include <util/Objects/UFunction.h>
+#include <util/Objects/UClass.h>
 #include <mod/ModFunctions.h>
 #include <mod/MathFunctions.h>
 #include <assets/AssetLoader.h>
@@ -15,8 +17,14 @@
 #include <SatisfactoryModLoader.h>
 
 #include "../SatisfactorySDK/SDK.hpp"
+
 namespace SML {
 	namespace Paks {
+		void invokeInitFunc(Objects::UObject* mod, Objects::UFunction* func) {
+			if (!func) return;
+			func->invoke(mod, nullptr);
+		}
+
 		void initPakLoader() {
 			using namespace SML::Mod;
 
@@ -32,7 +40,6 @@ namespace SML {
 					menu = false;
 					Utility::info("Initializing Paks!");
 					mods.clear();
-					modNames = L""; //clear pakmod list when loading a new map
 				}
 
 				// Get the execution path (\FactoryGame\Binaries\Win64\FactoryGame.exe)
@@ -94,12 +101,12 @@ namespace SML {
 								Objects::UObject* modActor = (Objects::UObject*)::call<&Objects::UWorld::SpawnActor>((Objects::UWorld*)*SDK::UWorld::GWorld, (SDK::UClass*)clazz, &position, &rotation, &spawnParams);
 								//Propogate data to initmenu
 								if (debugOutput) {
-									::call<&Objects::UObject::CallFunctionByNameWithArguments>(modActor, L"DebugModeEnabled", &output, (SDK::UObject*)NULL, true); // Call the event
+									invokeInitFunc(modActor, modActor->findFunction(L"DebugModeEnabled")); // Call the event
 								}
 								if (firstMenuLoad) {
-									::call<&Objects::UObject::CallFunctionByNameWithArguments>(modActor, L"FirstMenuLoad", &output, (SDK::UObject*)NULL, true);
+									invokeInitFunc(modActor, modActor->findFunction(L"FirstMenuLoad")); // Call the event
 								}
-								::call<&Objects::UObject::CallFunctionByNameWithArguments>(modActor, L"Init", &output, (SDK::UObject*)NULL, true);
+								invokeInitFunc(modActor, modActor->findFunction(L"Init")); // Call the event
 							} else {
 								// Load the blueprint
 								const std::wstring bpPath = L"/Game/FactoryGame/" + modNameW + L"/InitMod.InitMod_C";
@@ -128,32 +135,24 @@ namespace SML {
 
 								Objects::UObject* modActor = (Objects::UObject*)::call<&Objects::UWorld::SpawnActor>((Objects::UWorld*)*SDK::UWorld::GWorld, (SDK::UClass*)clazz, &position, &rotation, &spawnParams);
 								mods.push_back(modActor); // Add the mod actor to the mods list
-								modNames += L"," + modNameW; // Append the mod name to the modNames string
 							}
 						}
 					}
 				}
 
-				// Check if any mods got loaded
-				if (modNames.length() > 0) {
-					modNames = modNames.substr(1); // remove the first letter (99.98% a comma)
-					Functions::broadcastEvent("beforePakPreInit");
-					// Iterate through all mods and call the preinit event
-					for (Objects::UObject* mod : mods) {
-						//Propogate data to initmod
-						if (debugOutput) {
-							::call<&Objects::UObject::CallFunctionByNameWithArguments>(mod, L"DebugModeEnabled", &output, (SDK::UObject*)NULL, true); // Call the event
-						}
-						::call<&Objects::UObject::CallFunctionByNameWithArguments>(mod, L"PreInit", &output, (SDK::UObject*)NULL, true); // Call the event
-					};
-					Functions::broadcastEvent("afterPakPreInit");
-					Functions::broadcastEvent("beforePakInit");
-					// Iterate through all mods and call the init event
-					for (Objects::UObject* mod : mods) {
-						::call<&Objects::UObject::CallFunctionByNameWithArguments>(mod, (L"Init " + modNames).c_str(), &output, (SDK::UObject*)NULL, true); // Call the event
-					}
-					Functions::broadcastEvent("afterPakInit");
+				Functions::broadcastEvent("beforePakPreInit");
+				// Iterate through all mods and call the preinit event
+				for (Objects::UObject* mod : mods) {
+					//Propogate data to initmod
+					invokeInitFunc(mod, mod->findFunction(L"PreInit")); // Call the event
+				};
+				Functions::broadcastEvent("afterPakPreInit");
+				Functions::broadcastEvent("beforePakInit");
+				// Iterate through all mods and call the init event
+				for (Objects::UObject* mod : mods) {
+					invokeInitFunc(mod, mod->findFunction(L"Init")); // Call the event
 				}
+				Functions::broadcastEvent("afterPakInit");
 			});
 
 			//delay post init to later down the loading sequence
@@ -161,7 +160,7 @@ namespace SML {
 				// Iterate through all mods and call the postinit event
 				Functions::broadcastEvent("beforePakPostInit");
 				for (Objects::UObject* mod : mods) {
-					::call<&Objects::UObject::CallFunctionByNameWithArguments>(mod, (L"PostInit " + modNames).c_str(), &output, (SDK::UObject*)NULL, true); // Call the event
+					invokeInitFunc(mod, mod->findFunction(L"PostInit")); // Call the event
 					::call<&Objects::AActor::Destroy>((Objects::AActor*)mod, false, true);
 				}
 				Functions::broadcastEvent("afterPakPostInit");
