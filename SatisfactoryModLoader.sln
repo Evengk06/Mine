@@ -4,8 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SatisfactoryModLoader", "SatisfactoryModLoader\SatisfactoryModLoader.vcxproj", "{40237398-4B3F-4F7A-9A60-78683EA1693A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{160CF85A-4F6C-4DDA-83BF-2A7A00EE55BC} = {160CF85A-4F6C-4DDA-83BF-2A7A00EE55BC}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMod", "BaseMod\BaseMod.vcxproj", "{9A228E85-7864-43DC-9A88-015FECD30485}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleMod", "BaseMod\BaseMod.vcxproj", "{D329EC57-29A6-451F-9AE6-1AAEF2662178}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Detours", "Detours\Detours.vcxproj", "{160CF85A-4F6C-4DDA-83BF-2A7A00EE55BC}"
 EndProject
@@ -16,8 +19,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{40237398-4B3F-4F7A-9A60-78683EA1693A}.Release|x64.ActiveCfg = Release|x64
 		{40237398-4B3F-4F7A-9A60-78683EA1693A}.Release|x64.Build.0 = Release|x64
-		{9A228E85-7864-43DC-9A88-015FECD30485}.Release|x64.ActiveCfg = Release|x64
-		{9A228E85-7864-43DC-9A88-015FECD30485}.Release|x64.Build.0 = Release|x64
+		{D329EC57-29A6-451F-9AE6-1AAEF2662178}.Release|x64.ActiveCfg = Release|x64
+		{D329EC57-29A6-451F-9AE6-1AAEF2662178}.Release|x64.Build.0 = Release|x64
 		{160CF85A-4F6C-4DDA-83BF-2A7A00EE55BC}.Release|x64.ActiveCfg = Release|x64
 		{160CF85A-4F6C-4DDA-83BF-2A7A00EE55BC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
