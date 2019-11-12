@@ -32,6 +32,7 @@
 #include <mod/Hooks.h>
 #include <mod/Coremods.h>
 #include <mod/ModFunctions.h>
+#include <assets/SBL.h>
 
 #include <chrono>
 #include <thread>
@@ -84,6 +85,7 @@ namespace SML {
 		SDK::InitSDK();
 		Objects::initObjects();
 		Assets::AssetLoader::init();
+		Paks::initSBL();
 		Utility::info("Initialized SDK");
 
 		//load coremods

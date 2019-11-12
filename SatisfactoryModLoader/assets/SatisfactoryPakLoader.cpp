@@ -21,8 +21,19 @@
 namespace SML {
 	namespace Paks {
 		void invokeInitFunc(Objects::UObject* mod, Objects::UFunction* func) {
+			struct StrParams {
+				Objects::FString str;
+			};
+			
 			if (!func) return;
-			func->invoke(mod, nullptr);
+
+			auto c = (Objects::UProperty*) func->childs;
+			if (c && !c->next) {
+				if (c->clazz->castFlags & Objects::EClassCastFlags::CAST_UStrProperty) {
+					StrParams p;
+					func->invoke(mod, &p);
+				}
+			} else if (!c) func->invoke(mod, nullptr);
 		}
 
 		void initPakLoader() {

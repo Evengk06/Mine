@@ -1,7 +1,9 @@
 #pragma once
+#include <Lib.h>
+
 namespace SML {
 	extern bool loadConsole;
-	extern bool debugOutput;
+	SML_API extern bool debugOutput;
 	extern bool supressErrors;
 	extern bool chatCommands;
 	extern bool crashReporter;
