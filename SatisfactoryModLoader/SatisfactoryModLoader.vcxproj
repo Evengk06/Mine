@@ -33,8 +33,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\xinput1_3\detours;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\xinput1_3\detours;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\..\xinput1_3\detours;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\..\xinput1_3\detours;$(LibraryPath)</LibraryPath>
     <TargetName>xinput1_3</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -48,7 +48,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;SATISFACTORYMODLOADER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\zip\ttvfs_zip;$(MSBuildProjectDirectory)\zip\ttvfs;$(SolutionDir)\Detours\src;%(AdditionalIncludeDirectories);$(MSBuildProjectDirectory);$(SolutionDir)\SatisfactorySDK\SDK</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\zip\ttvfs_zip;$(MSBuildProjectDirectory)\zip\ttvfs;$(ProjectDir)\..\Detours\src;%(AdditionalIncludeDirectories);$(MSBuildProjectDirectory);$(ProjectDir)\..\SatisfactorySDK\SDK</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -57,12 +57,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
-      <ModuleDefinitionFile>$(SolutionDir)\xinput1_3\xinput1_3.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>$(ProjectDir)\..\xinput1_3\xinput1_3.def</ModuleDefinitionFile>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <AdditionalDependencies>$(ProjectDir)\ttvfs_zip.lib;$(ProjectDir)\ttvfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)\xinput1_3\detours;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\xinput1_3\detours;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>
@@ -74,6 +74,7 @@
     <ClInclude Include="assets\AssetFunctions.h" />
     <ClInclude Include="assets\AssetLoader.h" />
     <ClInclude Include="assets\FObjectSpawnParameters.h" />
+    <ClInclude Include="assets\SBL.h" />
     <ClInclude Include="Configs.h" />
     <ClInclude Include="game\Etc.h" />
     <ClInclude Include="game\Global.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="assets\BPInterface.cpp" />
     <ClCompile Include="assets\AssetFunctions.cpp" />
     <ClCompile Include="assets\AssetLoader.cpp" />
+    <ClCompile Include="assets\SBL.cpp" />
     <ClCompile Include="Configs.cpp" />
     <ClCompile Include="game\API.cpp" />
     <ClCompile Include="game\Etc.cpp" />
@@ -172,11 +174,6 @@
     <ClCompile Include="..\SatisfactorySDK\SDK\FG_Engine_functions.cpp" />
     <ClCompile Include="..\SatisfactorySDK\SDK\FG_FactoryGame_functions.cpp" />
     <ClCompile Include="..\xinput1_3\xinput1_3.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Detours\Detours.vcxproj">
-      <Project>{160cf85a-4f6c-4dda-83bf-2a7a00ee55bc}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\xinput1_3\xinput1_3.def" />
