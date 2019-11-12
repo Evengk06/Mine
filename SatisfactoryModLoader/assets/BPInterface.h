@@ -2,6 +2,7 @@
 
 #include <Lib.h>
 #include <util/Utility.h>
+#include <HookLoader.h>
 
 #include <map>
 #include <set>
@@ -20,6 +21,13 @@ namespace SDK {
 }
 
 namespace SML {
+	namespace Objects {
+		struct UGameEngine {
+			void Start();
+		};
+		DEFINE_METHOD(UGameEngine::Start);
+	}
+
 	namespace Paks {
 		struct FClassParams;
 		class FObjectInitializer;
@@ -603,6 +611,13 @@ namespace SML {
 			SML_API static PropertyBuilder retVal(Objects::EPropertyClass type, std::string name = "unnamed");
 
 			/**
+			* Creates a PropertyBuilder with a default setup for output parameters of functions
+			*
+			* @author Panakotta00
+			*/
+			SML_API static PropertyBuilder outParam(Objects::EPropertyClass type, std::string name = "unnamed");
+
+			/**
 			* Creates a PropertyBuilder with a default setup for function paramaters
 			*
 			* @author Panakotta00
@@ -807,14 +822,14 @@ namespace SML {
 			*
 			* @author Panakotta00
 			*/
-			SML_API static FunctionBuilder Method(std::string name = "unnamed");
+			SML_API static FunctionBuilder method(std::string name = "unnamed");
 
 			/**
 			* Creates a FunctionBuilder with a default setup for a static function with the given name
 			*
 			* @author Panakotta00
 			*/
-			SML_API static FunctionBuilder StaticFunction(std::string name = "unnamed");
+			SML_API static FunctionBuilder staticFunc(std::string name = "unnamed");
 
 			/**
 			* constructs the Objects::UFunction and kinda binds it to the given class

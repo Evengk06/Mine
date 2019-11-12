@@ -15,6 +15,10 @@
 using namespace SML::Objects;
 
 namespace SML {
+	namespace Objects {
+		void UGameEngine::Start() {}
+	}
+
 	namespace Paks {
 		// detour function cache //
 		void(*constructUFunction)(UFunction*&, FFunctionParams) = nullptr;
@@ -118,12 +122,18 @@ namespace SML {
 			return size;
 		}
 
-		PropertyBuilder PropertyBuilder::retVal(const EPropertyClass type, const std::string name) {
+		PropertyBuilder PropertyBuilder::outParam(const EPropertyClass type, const std::string name) {
 			PropertyBuilder builder;
 			builder.createStructFromType(type);
 			builder.name(name);
 			builder.addObjFlags(RF_MarkAsNative | RF_Transient | RF_Public);
 			builder.addParamFlags(Prop_SkipSerialization | Prop_Parm | Prop_OutParm);
+			return builder;
+		}
+
+		PropertyBuilder PropertyBuilder::retVal(const EPropertyClass type, const std::string name) {
+			PropertyBuilder builder = outParam(type, name);
+			builder.addParamFlags(Prop_ReturnParm);
 			return builder;
 		}
 
@@ -389,7 +399,7 @@ namespace SML {
 
 		// --- FunctionBuilder --- //
 
-		FunctionBuilder FunctionBuilder::Method(std::string name) {
+		FunctionBuilder FunctionBuilder::method(std::string name) {
 			FunctionBuilder builder;
 			builder.name(name);
 			builder.addObjFlags(RF_MarkAsNative | RF_Transient | RF_Public);
@@ -397,7 +407,7 @@ namespace SML {
 			return builder;
 		}
 		
-		FunctionBuilder FunctionBuilder::StaticFunction(std::string name) {
+		FunctionBuilder FunctionBuilder::staticFunc(std::string name) {
 			FunctionBuilder builder;
 			builder.name(name);
 			builder.addObjFlags(RF_MarkAsNative | RF_Transient | RF_Public);
