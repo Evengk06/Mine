@@ -33,8 +33,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\..\xinput1_3\detours;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\..\xinput1_3\detours;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\Detours;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\Detours;$(LibraryPath);</LibraryPath>
     <TargetName>xinput1_3</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -59,7 +59,8 @@
       <AssemblyDebug>true</AssemblyDebug>
       <ModuleDefinitionFile>$(ProjectDir)\..\xinput1_3\xinput1_3.def</ModuleDefinitionFile>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>$(ProjectDir)\ttvfs_zip.lib;$(ProjectDir)\ttvfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\ttvfs_zip.lib;$(ProjectDir)\ttvfs.lib;%(AdditionalDependencies);Detours.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutputPath)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)\..\xinput1_3\detours;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
