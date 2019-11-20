@@ -14,12 +14,6 @@
 #include <util/Objects/FString.h>
 
 namespace SML {
-	namespace Assets {
-		//If you use these, i'll deconstruct a power pole somewhere in your factory >:)
-		SML_API SDK::UWorld** CurrentWorld = nullptr;
-		SML_API SDK::AFGCharacterPlayer* SinglePlayerCharacter = nullptr;
-		SML_API SDK::AFGPlayerController* SinglePlayerController = nullptr;
-	}
 	namespace Mod {
 		namespace Functions {
 			SML_API SDK::UObject* loadObjectFromPak(SDK::UClass* ObjectClass, const wchar_t *InName) {
