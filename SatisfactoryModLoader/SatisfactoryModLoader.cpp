@@ -33,6 +33,7 @@
 #include <mod/Coremods.h>
 #include <mod/ModFunctions.h>
 #include <assets/SBL.h>
+#include <thirdparty/FicsitApp.h>
 
 #include <chrono>
 #include <thread>
@@ -80,6 +81,8 @@ namespace SML {
 		if (loadConsole) {
 			ShowWindow(GetConsoleWindow(), SW_SHOW);
 		}
+
+		FicsitApp::checkForUpdates(smlVersion);
 
 		// load sdk, assetloader and objects
 		SDK::InitSDK();

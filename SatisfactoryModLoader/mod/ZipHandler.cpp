@@ -10,7 +10,7 @@
 #include <detours.h>
 
 #include <cstdio>
-#include "zip/MemoryModule.h"
+// #include <zip/MemoryModule.h>
 
 namespace SML {
 	namespace Mod {
@@ -115,6 +115,7 @@ namespace SML {
 			}
 		}
 
+		/*
 		void ZipHandler::loadMemoryDLL(void *data, size_t size, std::string file, ModHandler modHandler) {
 			HMEMORYMODULE dll = MemoryLoadLibrary(data, size);
 
@@ -129,6 +130,7 @@ namespace SML {
 				MemoryFreeLibrary(dll);
 			}
 		}
+		*/
 
 		void ZipHandler::destroy() {
 			Utility::debug("Cleaning up ZipHandler");
