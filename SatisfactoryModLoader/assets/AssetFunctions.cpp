@@ -14,12 +14,6 @@
 #include <util/Objects/FString.h>
 
 namespace SML {
-	namespace Assets {
-		//If you use these, i'll deconstruct a power pole somewhere in your factory >:)
-		SML_API SDK::UWorld** CurrentWorld = nullptr;
-		SML_API SDK::AFGCharacterPlayer* SinglePlayerCharacter = nullptr;
-		SML_API SDK::AFGPlayerController* SinglePlayerController = nullptr;
-	}
 	namespace Mod {
 		namespace Functions {
 			SML_API SDK::UObject* loadObjectFromPak(SDK::UClass* ObjectClass, const wchar_t *InName) {
@@ -136,78 +130,6 @@ namespace SML {
 				PVOID hook = DetourFindFunction("FactoryGame-Win64-Shipping.exe", "AFGPlayerController::EnterChatMessage");
 				auto pointer = (void(WINAPI*)(void*, void*))hook;
 				pointer(getPlayerController(), fstring);
-			}
-
-			SML_API size_t registerAssetForCache(const wchar_t* name) {
-				size_t id = 0;
-				if (modHandler.currentStage == GameStage::SETUP || modHandler.currentStage == GameStage::POST_SETUP) {
-					if (modHandler.assetCache.count(name) > 0) {
-						Utility::warning("Skipping cache registration of existing asset ", name);
-						for (std::pair<int, const wchar_t*> pair : modHandler.assetIdRegistry) {
-							if (name == pair.second) {
-								id = pair.first;
-								break;
-							}
-						}
-					} else {
-						id = modHandler.assetCache.size();
-						modHandler.assetCache.emplace(name, nullptr);
-						modHandler.assetIdRegistry.emplace(id, name);
-					}
-				} else if (modHandler.currentStage == GameStage::RUN) {
-					if (modHandler.assetCache.count(name) > 0) {
-						Utility::warning("Skipping cache registration of existing asset ", name);
-						for (std::pair<int, const wchar_t*> pair : modHandler.assetIdRegistry) {
-							if (name == pair.second) {
-								id = pair.first;
-								break;
-							}
-						}
-					} else {
-						id = modHandler.assetCache.size();
-						modHandler.assetCache.emplace(name, nullptr);
-						modHandler.assetCache[name] = Assets::AssetLoader::loadObjectSimple(SDK::UClass::StaticClass(), name);
-						modHandler.assetIdRegistry.emplace(id, name);
-					}
-				}
-				return id;
-			}
-
-			SML_API SDK::UObject* getAssetFromCache(const wchar_t* name) {
-				if (modHandler.currentStage != GameStage::RUN) {
-					std::wstring ws(name);
-					Utility::displayCrash("Attempted to get cached asset\n" + std::string(ws.begin(), ws.end()) + "\n before it was cached!");
-				} else {
-					if (modHandler.assetCache.count(name) > 0) {
-						return modHandler.assetCache[name];
-					}
-					else {
-						size_t id = modHandler.assetCache.size();
-						modHandler.assetCache.emplace(name, nullptr);
-						modHandler.assetCache[name] = Assets::AssetLoader::loadObjectSimple(SDK::UClass::StaticClass(), name);
-						modHandler.assetIdRegistry.emplace(id, name);
-						return modHandler.assetCache[name];
-					}
-				}
-			}
-
-			//again, if you hardcode these ids, you are setting yourself up for disaster
-			SML_API SDK::UObject* getAssetFromCacheWithID(int id) {
-				if (modHandler.assetIdRegistry.count(id) > 0) {
-					return modHandler.assetCache[modHandler.assetIdRegistry[id]];
-				}
-				else {
-					Utility::displayCrash("Attempted to get cached asset with id (" + std::to_string(id) + ") that doesn't exist!");
-				}
-			}
-
-			SML_API const wchar_t* getAssetNameFromID(int id) {
-				if (modHandler.assetIdRegistry.count(id) > 0) {
-					return modHandler.assetIdRegistry[id];
-				}
-				else {
-					Utility::displayCrash("Attempted to get cached asset name with id (" + std::to_string(id) + ") that doesn't exist!");
-				}
 			}
 		}
 	}

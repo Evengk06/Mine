@@ -55,9 +55,6 @@ namespace SML {
 			//caching of assets
 			Functions::broadcastEvent("beforeEngineInit");
 			modHandler.currentStage = GameStage::RUN;
-			for (std::pair<const wchar_t*, SDK::UObject*> asset : modHandler.assetCache) {
-				modHandler.assetCache[asset.first] = Assets::AssetLoader::loadObjectSimple(SDK::UClass::StaticClass(), asset.first);
-			}
 
 			//load delayed coremods
 			for (std::string libPath : delayedCoremods) {

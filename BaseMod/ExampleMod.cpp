@@ -136,14 +136,6 @@ public:
 				//::call<&AFGPlayerController::Suicide>(player);
 			}
 			if (GetAsyncKeyState('H')) {
-				//get this object back from the asset cache
-				//If an object is not found in the cache, it will automatically register it, causing a slowdown, so make sure that your assets are cached before calling retrieving them.
-				//If you call this function before satisfactory is done loading, it will also throw an error as assets cannot be loaded at the time due to unreal limitations.
-				//P.S. you can also use forward slashes instead of back slashes if you want.
-				SDK::UObject* obj = Functions::getAssetFromCache(L"\\Game\\FactoryGame\\Character\\Creature\\Wildlife\\SpaceRabbit\\Char_SpaceRabbit.Char_SpaceRabbit_C");
-				//spawn the object at the player's location and rotation
-				Functions::spawnActorAtPlayer(obj);
-
 				//Here we are going to invoke an sml chat command through code.
 				//This command will print out the adresses of commonly used pointers.
 				LOG("Printing the adresses of pointers!");
@@ -168,10 +160,6 @@ public:
 
 		//Register a custom event. This does not call the event, you have to do that with Functions::broadcastEvent.
 		Functions::registerEvent("ExampleMod_PostSetupComplete", postSetupComplete);
-
-		//cache this asset at loading to make sure that when it's spawned, slowdowns won't occur at runtime
-		//calling this function while in game will cache the asset immediately, causing a slowdown.
-		Functions::registerAssetForCache(L"\\Game\\FactoryGame\\Character\\Creature\\Wildlife\\SpaceRabbit\\Char_SpaceRabbit.Char_SpaceRabbit_C");
 
 		LOG("Finished ExampleMod setup!");
 	}

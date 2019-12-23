@@ -3,25 +3,6 @@
 #include <Lib.h>
 
 namespace SML {
-	namespace Assets {
-		/**
-		* DEPRECATED! Use Functions::getWorld() instead.
-		* Current UWorld pointer pointer
-		*/
-		SML_API extern SDK::UWorld** CurrentWorld;
-
-		/**
-		* DEPRECATED! Use Functions::getPlayerCharacter() instead.
-		* Single player character
-		*/
-		SML_API extern SDK::AFGCharacterPlayer* SinglePlayerCharacter;
-
-		/**
-		* DEPRECATED! Use Functions::getPlayerController() instead.
-		* Single player controller
-		*/
-		SML_API extern SDK::AFGPlayerController* SinglePlayerController;
-	}
 	namespace Mod {
 		namespace Functions {
 			/**
@@ -37,8 +18,6 @@ namespace SML {
 			SML_API SDK::UObject* loadObjectFromPak(SDK::UClass *ObjectClass, const wchar_t* InName);
 
 			/**
-			* This function has been largely replaced by the asset caching system. To prevent slowdowns, use that instead!
-			* 
 			* Load an object from a pak file. Will crash if the pak is not installed.
 			*
 			* The asset name must be of the following format: \\Game\\FactoryGame\\Path\\To\\Asset\\AssetFile.AssetFile
@@ -167,43 +146,6 @@ namespace SML {
 			* @author Brabb3l
 			*/
 			SML_API void sendMessageToPlayer(std::string msg);
-
-			/**
-			* Registers an asset path for caching.
-			*
-			* This removes delays and sutters when loading an asset during gameplay.
-			* Only call this during setup and post setup! calling it afterwards will just cache the object at the time it's called.
-			*
-			* This function returns an int id for ease of access when getting an item back from the cache.
-			*
-			* @author SuperCoder79
-			*/
-			SML_API size_t registerAssetForCache(const wchar_t* name);
-
-			/**
-			* Returns the UObject pointer from the cache for spawning.
-			*
-			* Will crash if called before satisfactory is running or if the name isn't found in the cache!
-			*
-			* @author SuperCoder79
-			*/
-			SML_API SDK::UObject* getAssetFromCache(const wchar_t* name);
-
-			/**
-			* Gets an item back from the cache with the specified id.
-			* Will crash if the id isn't found.
-			*
-			* @author SuperCoder79
-			*/
-			SML_API SDK::UObject* getAssetFromCacheWithID(int id);
-
-			/**
-			* Get's an asset's name back from the cache with the name's id.
-			* Will crash if the id isn't found.
-			*
-			* @author SuperCoder79
-			*/
-			SML_API const wchar_t* getAssetNameFromID(int id);
 		}
 	}
 }
