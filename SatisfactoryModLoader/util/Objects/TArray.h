@@ -157,7 +157,7 @@ namespace SML {
 
 			inline void add(const T& item) {
 				if (!max) {
-					data = (T*) FMemory::malloc(1);
+					data = (T*) FMemory::malloc(sizeof(T));
 					count = 0;
 					max = 1;
 				} else if (count + 1 > max) {

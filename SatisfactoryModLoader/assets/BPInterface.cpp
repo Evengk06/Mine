@@ -293,6 +293,12 @@ namespace SML {
 			return *this;
 		}
 
+		PropertyBuilder & PropertyBuilder::saveGame() {
+			addParamFlags(Prop_SaveGame);
+			remParamFlags(Prop_SkipSerialization);
+			return *this;
+		}
+
 		PropertyBuilder & PropertyBuilder::structFunc(void *(*func)()) {
 			switch (structType) {
 			case Struct:

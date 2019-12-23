@@ -22,7 +22,8 @@ namespace SDK {
 
 namespace SML {
 	namespace Objects {
-		struct UGameEngine {
+		class UGameEngine {
+		public:
 			void Start();
 		};
 		DEFINE_METHOD(UGameEngine::Start);
@@ -768,6 +769,14 @@ namespace SML {
 			SML_API PropertyBuilder& funcFunc(void*(*)());
 
 			/**
+			* makes the property saveable
+			*
+			*
+			* @author Panakotta00
+			*/
+			SML_API PropertyBuilder& saveGame();
+
+			/**
 			* sets the structRetFunc for the referenced structure
 			*
 			* @author Panakotta00
@@ -1473,7 +1482,6 @@ namespace SML {
 				if (active.vfptr) {
 					(*(void***)objInit.obj) = active.vfptr;
 				}
-				objInit.obj->clazz = active.params.staticClass();
 
 				if (active.constructorf) (((T*)objInit.obj)->*(active.constructorf))();
 			}
