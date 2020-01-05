@@ -427,7 +427,7 @@ namespace SML {
 			FPropertyParamsBase** props = new FPropertyParamsBase*[this->props.size()];
 			int nextOff = 0;
 			params.structSize = 0;
-			for (int i = this->props.size() - 1; i >= 0; --i) {
+			for (int i = 0; i < this->props.size(); ++i) {
 				auto& p = this->props[i];
 				auto noff = p.getOff();
 				auto nsize = p.getSize();
