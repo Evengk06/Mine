@@ -43,7 +43,6 @@ namespace SML {
 
 		bool FWeakObjectPtr::operator<(const FWeakObjectPtr & o) const {
 			if (index < o.index) return true;
-			if (index > o.index) return true;
 			return serial < o.serial;
 		}
 
