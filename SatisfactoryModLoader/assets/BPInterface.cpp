@@ -427,7 +427,9 @@ namespace SML {
 			FPropertyParamsBase** props = new FPropertyParamsBase*[this->props.size()];
 			int nextOff = 0;
 			params.structSize = 0;
-			for (int i = 0; i < this->props.size(); ++i) {
+
+			// prop offsets & sizes
+			for (int i = this->props.size() - 1; i >= 0; --i) {
 				auto& p = this->props[i];
 				auto noff = p.getOff();
 				auto nsize = p.getSize();
@@ -436,10 +438,30 @@ namespace SML {
 					if (noff == -1) p.off(nextOff);
 					nextOff += nsize;
 				}
+				
+				auto nstructs = p.getOff() + nsize;
+				if (nstructs > params.structSize) params.structSize = nstructs;
+			}
 
-				params.structSize += nsize;
+			// prop build
+			auto wasArr = false;
+			for (int i = 0; i < this->props.size(); ++i) {
+				auto& p = this->props[i];
+
+				auto ps = this->props.size();
+
 				auto pr = p.build();
-				props[i] = pr;
+				auto pi = ps - 1 - i;
+				if (wasArr) {
+					wasArr = false;
+					props[pi] = props[pi + 1];
+					props[pi + 1] = pr;
+				} else {
+					props[ps - 1 - i] = pr;
+				}
+				if (pr->type == EPropertyClass::Array) {
+					wasArr = true;
+				}
 			}
 			params.propArr = props;
 			params.propCount = static_cast<std::int32_t>(this->props.size());
@@ -513,6 +535,7 @@ namespace SML {
 		}
 
 		FunctionBuilder & FunctionBuilder::param(const PropertyBuilder & prop) {
+			//props.insert(props.begin(), prop);
 			props.push_back(prop);
 			return *this;
 		}

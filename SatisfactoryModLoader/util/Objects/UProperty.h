@@ -129,6 +129,15 @@ namespace SML {
 			}
 
 			/**
+			* Inizilaizes the value at the given pointer with the propertys value with the default value or constructor.
+			* This function sees the pointer as valid to memory space wich content is invalid
+			* It calls f.e. FString::FString
+			*
+			* @author Panakotta00
+			*/
+			SML_API void initValue(void* ptr);
+
+			/**
 			* Returns the UClass of UProperty
 			*/
 			SML_API static UClass* staticClass();
